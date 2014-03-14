@@ -146,6 +146,17 @@ void aft_order(Tree T)
 	}
 }
 
+void destroy_tree(Tree &T)
+{
+	if(T == NULL)
+		return;
+	destroy_tree(T->left);
+	destroy_tree(T->right);
+	std::cout << T->data << " ";
+	delete T;
+	T == NULL;
+}
+
 int main()
 {
 	Tree T;
@@ -164,6 +175,10 @@ int main()
 
 	std::cout << "------------" << std::endl;
 	aft_order(T);
+	std::cout << std::endl;
+
+	std::cout << "***********" << std::endl;
+	destroy_tree(T);
 	std::cout << std::endl;
 
 	return 0;
