@@ -88,6 +88,19 @@ Tree copy_tree(Tree T)
     return ret_tree;
 }
 
+void swap_tree(Tree &T)
+{
+    if(T)
+    {
+        Tree temp = T->left;
+        T->left = T->right;
+        T->right = temp;
+        
+        swap_tree(T->left);
+        swap_tree(T->right);
+    }
+}
+
 void destroy_tree(Tree &T)
 {
 	if(T == NULL)
@@ -109,20 +122,16 @@ int main()
 		insertOrder(T, i);
 //		std::cout << _tmp << " ";
 	}
-    std::cout << std::endl;
-
     mid_order_cur(T);
 
     std::cout << std::endl;
+    swap_tree(T);
     
     pre_order_cur(T);
-
-
     std::cout << std::endl;
     
-    Tree T2 = copy_tree(T);
 
-    mid_order_cur(T2);
-    std::cout << std::endl;
+
+    
 	return 0;
 }
