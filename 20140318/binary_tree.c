@@ -85,11 +85,12 @@ Tree insert_tree(Tree T, int key)
     }
     else if(key < T->data)
     {
-        return T->left = insert_tree(T->left, key);
+        T->left = insert_tree(T->left, key);
     }else
     {
-        return T->right = insert_tree(T->right, key);
+        T->right = insert_tree(T->right, key);
     }
+    return T;
 }
 
 int insert_tree2(Tree *T, int key)
