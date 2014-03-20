@@ -10,6 +10,7 @@
 #include <stack>
 #include <cstdlib>
 #include <ctime>
+#include <assert.h>
 
 struct TreeNode
 {
@@ -20,6 +21,8 @@ struct TreeNode
 
 typedef TreeNode* Tree;
 
+bool delete_node(Tree &p);
+    
 bool insertOrder(Tree &T, int data)
 {
 	if (T == NULL)
@@ -39,6 +42,65 @@ bool insertOrder(Tree &T, int data)
 	}
 	else
 		return false;
+}
+
+
+bool delete_tree(Tree &T, int key)
+{
+    if(T == NULL)
+    {
+        return false;
+    }
+    if(T->data == key)
+    {
+        return delete_node(T);    
+    }else if (key < T->data)
+    {
+        return delete_tree(T->left, key);
+    }else
+    {
+        return delete_tree(T->right, key);
+    }
+    
+
+}
+
+
+bool delete_node(Tree &p)
+{
+    assert(p);
+    Tree tmp, s;
+    if(p->left == NULL)    //左子树为空
+    {
+        tmp = p;
+        p = p->right;
+        free(tmp);
+    }else if(p->right == NULL)    //右子树为空
+    {
+        tmp = p;
+        p = p->left;
+        free(tmp);
+    }else                       //左右均不为空
+    {
+        tmp = p;
+        s = p->right;
+        while(s->left)              //找到直接后继
+        {
+            tmp = s;
+            s = s->left;
+        }
+        p->data = s->data;     
+        if(p == tmp)                //s没有左移
+        {
+            tmp->right = s->right;
+        }else
+        {
+            tmp->left = s->right;
+        }
+        free(s);
+    }
+
+    return true;
 }
 
 void pre_order_cur(Tree T)
@@ -159,26 +221,22 @@ void destroy_tree(Tree &T)
 
 int main()
 {
-	Tree T;
-	std::srand(100);
+	Tree T = NULL;
 	for (int i = 0; i < 10; i++)
 	{
-		int _tmp = std::rand() % 100;
-		insertOrder(T, _tmp);
-		std::cout << _tmp << " ";
+		insertOrder(T, i);
 	}
 
 	std::cout << std::endl;
 
-	aft_order_cur(T);
+    mid_order(T);
 	std::cout << std::endl;
 
-	std::cout << "------------" << std::endl;
-	aft_order(T);
-	std::cout << std::endl;
 
-	std::cout << "***********" << std::endl;
-	destroy_tree(T);
+    delete_tree(T, 5);
+
+
+    mid_order(T);
 	std::cout << std::endl;
 
 	return 0;
